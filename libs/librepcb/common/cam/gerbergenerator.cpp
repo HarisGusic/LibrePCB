@@ -371,7 +371,7 @@ QString GerberGenerator::escapeString(const QString& str) noexcept {
   // Note: Even if backslashes are allowed, we will remove them because we
   // haven't implemented proper escaping. Escaping of unicode characters is also
   // missing here.
-  QString validChars("[a-zA-Z0-9_+-/!?<>”’(){}.|&@# ,;$:=]");
+  QString validChars("-a-zA-Z0-9_+/!?<>”’(){}.|&@# ,;$:=");
   ret.remove(QRegularExpression(QString("[^%1]").arg(validChars)));
   // limit length to 65535 characters
   ret.truncate(65535);
