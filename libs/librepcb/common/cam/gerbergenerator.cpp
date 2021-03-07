@@ -40,10 +40,12 @@ namespace librepcb {
  ******************************************************************************/
 
 GerberGenerator::GerberGenerator(const QString& projName, const Uuid& projUuid,
-                                 const QString& projRevision) noexcept
-  : mProjectId(escapeString(projName)),
+                                 const QString& projRevision,
+                                 bool x1Compatibility) noexcept
+  : mProjectId(projName),
     mProjectUuid(projUuid),
-    mProjectRevision(escapeString(projRevision)),
+    mProjectRevision(projRevision),
+    mX1Compatibility(x1Compatibility),
     mOutput(),
     mContent(),
     mApertureList(new GerberApertureList()),
@@ -282,18 +284,13 @@ void GerberGenerator::printHeader() noexcept {
   mOutput.append("G04 --- HEADER BEGIN --- *\n");
 
   // add some X2 attributes
-  QString appVersion = qApp->applicationVersion();
-  QString creationDate = QDateTime::currentDateTime().toString(Qt::ISODate);
-  QString projId = mProjectId.remove(',');
-  QString projUuid = mProjectUuid.toStr();
-  QString projRevision = mProjectRevision.remove(',');
-  mOutput.append(QString("%TF.GenerationSoftware,LibrePCB,LibrePCB,%1*%\n")
-                     .arg(appVersion));
-  mOutput.append(QString("%TF.CreationDate,%1*%\n").arg(creationDate));
-  mOutput.append(QString("%TF.ProjectId,%1,%2,%3*%\n")
-                     .arg(projId, projUuid, projRevision));
-  mOutput.append("%TF.Part,Single*%\n");  // "Single" means "this is a PCB"
-  // mOutput.append("%TF.FilePolarity,Positive*%\n");
+  printX2Attribute('F', ".GenerationSoftware",
+                   {"LibrePCB", "LibrePCB", qApp->applicationVersion()});
+  printX2Attribute('F', ".CreationDate",
+                   {QDateTime::currentDateTime().toString(Qt::ISODate)});
+  printX2Attribute('F', ".ProjectId",
+                   {mProjectId, mProjectUuid.toStr(), mProjectRevision});
+  printX2Attribute('F', ".Part", {"Single"});  // "Single" means "this is a PCB"
 
   // coordinate format specification:
   //  - leading zeros omitted
@@ -326,10 +323,32 @@ void GerberGenerator::printContent() noexcept {
 
 void GerberGenerator::printFooter() noexcept {
   // MD5 checksum over content
-  mOutput.append(QString("%TF.MD5,%1*%\n").arg(calcOutputMd5Checksum()));
+  printX2Attribute('F', ".MD5", {calcOutputMd5Checksum()});
 
   // end of file
   mOutput.append("M02*\n");
+}
+
+void GerberGenerator::printX2Attribute(char scope, const QString& key,
+                                       const QStringList& values) noexcept {
+  QString s;
+  if (mX1Compatibility) {
+    // Use G04 comments since some PCB fabricators fail to parse X2 attributes.
+    s = "G04 #@! ";
+  } else {
+    // Use real X2 attributes.
+    s = "%";
+  }
+  s += "T" % QChar(scope) % key;
+  foreach (const QString& value, values) {
+    s += "," + escapeString(value).remove(",");
+  }
+  s += "*";
+  if (!mX1Compatibility) {
+    s += "%";
+  }
+  s += "\n";
+  mOutput.append(s);
 }
 
 QString GerberGenerator::calcOutputMd5Checksum() const noexcept {

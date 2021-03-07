@@ -22,6 +22,7 @@
  ******************************************************************************/
 #include "boardfabricationoutputsettings.h"
 
+#include <librepcb/common/application.h>
 #include <librepcb/common/graphics/graphicslayer.h>
 
 #include <QtCore>
@@ -57,7 +58,8 @@ BoardFabricationOutputSettings::BoardFabricationOutputSettings() noexcept
         {GraphicsLayer::sBotPlacement, GraphicsLayer::sBotNames}),
     mMergeDrillFiles(false),
     mEnableSolderPasteTop(false),
-    mEnableSolderPasteBot(false) {
+    mEnableSolderPasteBot(false),
+    mGerberX1Compatibility(false) {
 }
 
 BoardFabricationOutputSettings::BoardFabricationOutputSettings(
@@ -102,6 +104,15 @@ BoardFabricationOutputSettings::BoardFabricationOutputSettings(
   foreach (const SExpression& child,
            node.getChild("silkscreen_bot/layers").getChildren()) {
     mSilkscreenLayersBot.append(child.getValue());
+  }
+
+  // New settings added in file format 0.2. Note that here we do not check the
+  // loaded file format but detect whether the new settings are contained in
+  // the loaded file or not. This allows to use the new features in our CLI
+  // even with LibrePCB 0.1.x since the CLI allows to load a custom settings
+  // file.
+  if (const SExpression* e = node.tryGetChild("gerber_x1_compatibility/@0")) {
+    mGerberX1Compatibility = deserialize<bool>(*e, fileFormat);
   }
 }
 
@@ -154,6 +165,11 @@ void BoardFabricationOutputSettings::serialize(SExpression& root) const {
   SExpression& solderPasteBot = root.appendList("solderpaste_bot", true);
   solderPasteBot.appendChild("create", mEnableSolderPasteBot, false);
   solderPasteBot.appendChild("suffix", mSuffixSolderPasteBot, false);
+
+  // Do not export new settings in LibrePCB 0.1.x!
+  if (qApp->getFileFormatVersion() >= Version::fromString("0.2")) {
+    root.appendChild("gerber_x1_compatibility", mGerberX1Compatibility, true);
+  }
 }
 
 /*******************************************************************************
@@ -181,6 +197,7 @@ BoardFabricationOutputSettings& BoardFabricationOutputSettings::operator=(
   mMergeDrillFiles = rhs.mMergeDrillFiles;
   mEnableSolderPasteTop = rhs.mEnableSolderPasteTop;
   mEnableSolderPasteBot = rhs.mEnableSolderPasteBot;
+  mGerberX1Compatibility = rhs.mGerberX1Compatibility;
   return *this;
 }
 
@@ -205,6 +222,7 @@ bool BoardFabricationOutputSettings::operator==(
   if (mMergeDrillFiles != rhs.mMergeDrillFiles) return false;
   if (mEnableSolderPasteTop != rhs.mEnableSolderPasteTop) return false;
   if (mEnableSolderPasteBot != rhs.mEnableSolderPasteBot) return false;
+  if (mGerberX1Compatibility != rhs.mGerberX1Compatibility) return false;
   return true;
 }
 

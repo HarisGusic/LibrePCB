@@ -168,7 +168,8 @@ void BoardGerberExport::exportLayerBoardOutlines() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixOutlines());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sBoardOutlines);
   gen.generate();
   gen.saveToFile(fp);
@@ -179,7 +180,8 @@ void BoardGerberExport::exportLayerTopCopper() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixCopperTop());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sTopCopper);
   gen.generate();
   gen.saveToFile(fp);
@@ -190,7 +192,8 @@ void BoardGerberExport::exportLayerBottomCopper() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixCopperBot());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sBotCopper);
   gen.generate();
   gen.saveToFile(fp);
@@ -203,7 +206,8 @@ void BoardGerberExport::exportLayerInnerCopper() const {
     FilePath fp = getOutputFilePath(mSettings->getSuffixCopperInner());
     GerberGenerator gen(
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
-        mBoard.getUuid(), mProject.getMetadata().getVersion());
+        mBoard.getUuid(), mProject.getMetadata().getVersion(),
+        mSettings->getGerberX1Compatibility());
     drawLayer(gen, GraphicsLayer::getInnerLayerName(i));
     gen.generate();
     gen.saveToFile(fp);
@@ -216,7 +220,8 @@ void BoardGerberExport::exportLayerTopSolderMask() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderMaskTop());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sTopStopMask);
   gen.generate();
   gen.saveToFile(fp);
@@ -227,7 +232,8 @@ void BoardGerberExport::exportLayerBottomSolderMask() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderMaskBot());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sBotStopMask);
   gen.generate();
   gen.saveToFile(fp);
@@ -241,7 +247,8 @@ void BoardGerberExport::exportLayerTopSilkscreen() const {
     FilePath fp = getOutputFilePath(mSettings->getSuffixSilkscreenTop());
     GerberGenerator gen(
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
-        mBoard.getUuid(), mProject.getMetadata().getVersion());
+        mBoard.getUuid(), mProject.getMetadata().getVersion(),
+        mSettings->getGerberX1Compatibility());
     foreach (const QString& layer, layers) { drawLayer(gen, layer); }
     gen.setLayerPolarity(GerberGenerator::LayerPolarity::Negative);
     drawLayer(gen, GraphicsLayer::sTopStopMask);
@@ -258,7 +265,8 @@ void BoardGerberExport::exportLayerBottomSilkscreen() const {
     FilePath fp = getOutputFilePath(mSettings->getSuffixSilkscreenBot());
     GerberGenerator gen(
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
-        mBoard.getUuid(), mProject.getMetadata().getVersion());
+        mBoard.getUuid(), mProject.getMetadata().getVersion(),
+        mSettings->getGerberX1Compatibility());
     foreach (const QString& layer, layers) { drawLayer(gen, layer); }
     gen.setLayerPolarity(GerberGenerator::LayerPolarity::Negative);
     drawLayer(gen, GraphicsLayer::sBotStopMask);
@@ -272,7 +280,8 @@ void BoardGerberExport::exportLayerTopSolderPaste() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderPasteTop());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sTopSolderPaste);
   gen.generate();
   gen.saveToFile(fp);
@@ -283,7 +292,8 @@ void BoardGerberExport::exportLayerBottomSolderPaste() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderPasteBot());
   GerberGenerator gen(
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
-      mBoard.getUuid(), mProject.getMetadata().getVersion());
+      mBoard.getUuid(), mProject.getMetadata().getVersion(),
+      mSettings->getGerberX1Compatibility());
   drawLayer(gen, GraphicsLayer::sBotSolderPaste);
   gen.generate();
   gen.saveToFile(fp);

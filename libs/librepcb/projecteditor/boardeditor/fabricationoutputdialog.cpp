@@ -95,6 +95,8 @@ FabricationOutputDialog::FabricationOutputDialog(Board& board, QWidget* parent)
       botSilkscreen.contains(GraphicsLayer::sBotNames));
   mUi->cbxSilkBotValues->setChecked(
       botSilkscreen.contains(GraphicsLayer::sBotValues));
+
+  mUi->cbxGerberX1Compatibility->setChecked(s.getGerberX1Compatibility());
 }
 
 FabricationOutputDialog::~FabricationOutputDialog() {
@@ -166,6 +168,7 @@ void FabricationOutputDialog::on_btnGenerate_clicked() {
     s.setMergeDrillFiles(mUi->cbxDrillsMerge->isChecked());
     s.setEnableSolderPasteTop(mUi->cbxSolderPasteTop->isChecked());
     s.setEnableSolderPasteBot(mUi->cbxSolderPasteBot->isChecked());
+    s.setGerberX1Compatibility(mUi->cbxGerberX1Compatibility->isChecked());
     if (s != mBoard.getFabricationOutputSettings()) {
       mBoard.getFabricationOutputSettings() = s;  // TODO: use undo command
     }

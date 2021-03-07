@@ -65,7 +65,7 @@ public:
   GerberGenerator() = delete;
   GerberGenerator(const GerberGenerator& other) = delete;
   GerberGenerator(const QString& projName, const Uuid& projUuid,
-                  const QString& projRevision) noexcept;
+                  const QString& projRevision, bool x1Compatibility) noexcept;
   ~GerberGenerator() noexcept;
 
   // Getters
@@ -123,6 +123,8 @@ private:
   void printApertureList() noexcept;
   void printContent() noexcept;
   void printFooter() noexcept;
+  void printX2Attribute(char scope, const QString& key,
+                        const QStringList& values) noexcept;
   QString calcOutputMd5Checksum() const noexcept;
 
   // Static Methods
@@ -132,6 +134,17 @@ private:
   QString mProjectId;
   Uuid mProjectUuid;
   QString mProjectRevision;
+
+  /// Enable Gerber X1 compatibility mode
+  ///
+  /// If true, Gerber X2 instructions are prefixed with a G04 comment
+  /// instruction to get plain Gerber X1 output. This avoids issues with some
+  /// PCB fabricators since some old CAM software fails to parse Gerber X2
+  /// files. Ucamco recommends to work around the issue with old CAM software
+  /// this way (instead of just removing all X2 attributes) since the metadata
+  /// is still contained in the generated files but causes no issues anymore.
+  /// Other EDA software also does it this way.
+  bool mX1Compatibility;
 
   // Gerber Data
   QString mOutput;

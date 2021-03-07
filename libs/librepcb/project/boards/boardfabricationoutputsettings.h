@@ -100,6 +100,9 @@ public:
   bool getEnableSolderPasteBot() const noexcept {
     return mEnableSolderPasteBot;
   }
+  bool getGerberX1Compatibility() const noexcept {
+    return mGerberX1Compatibility;
+  }
 
   // Setters
   void setOutputBasePath(const QString& p) noexcept { mOutputBasePath = p; }
@@ -139,6 +142,7 @@ public:
   void setMergeDrillFiles(bool m) noexcept { mMergeDrillFiles = m; }
   void setEnableSolderPasteTop(bool e) noexcept { mEnableSolderPasteTop = e; }
   void setEnableSolderPasteBot(bool e) noexcept { mEnableSolderPasteBot = e; }
+  void setGerberX1Compatibility(bool c) noexcept { mGerberX1Compatibility = c; }
 
   /// @copydoc librepcb::SerializableObject::serialize()
   void serialize(SExpression& root) const override;
@@ -171,6 +175,12 @@ private:  // Data
   bool mMergeDrillFiles;
   bool mEnableSolderPasteTop;
   bool mEnableSolderPasteBot;
+
+  /// Enable Gerber X1 compatibility mode
+  ///
+  /// If true, output plain Gerber X1 instead of X2. This avoids issues with
+  /// some PCB fabricators since some old CAM software fails to parse Gerber X2.
+  bool mGerberX1Compatibility;
 };
 
 /*******************************************************************************
