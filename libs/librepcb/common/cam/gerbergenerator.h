@@ -64,8 +64,9 @@ public:
   // Constructors / Destructor
   GerberGenerator() = delete;
   GerberGenerator(const GerberGenerator& other) = delete;
-  GerberGenerator(const QString& projName, const Uuid& projUuid,
-                  const QString& projRevision, bool x1Compatibility) noexcept;
+  GerberGenerator(const QDateTime& datetime, const QString& projName,
+                  const Uuid& projUuid, const QString& projRevision,
+                  bool x1Compatibility) noexcept;
   ~GerberGenerator() noexcept;
 
   // Getters
@@ -131,6 +132,7 @@ private:
   static QString escapeString(const QString& str) noexcept;
 
   // Metadata
+  QDateTime mCreationDate;
   QString mProjectId;
   Uuid mProjectUuid;
   QString mProjectRevision;

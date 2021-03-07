@@ -39,10 +39,12 @@ namespace librepcb {
  *  Constructors / Destructor
  ******************************************************************************/
 
-GerberGenerator::GerberGenerator(const QString& projName, const Uuid& projUuid,
+GerberGenerator::GerberGenerator(const QDateTime& creationDate,
+                                 const QString& projName, const Uuid& projUuid,
                                  const QString& projRevision,
                                  bool x1Compatibility) noexcept
-  : mProjectId(projName),
+  : mCreationDate(creationDate),
+    mProjectId(projName),
     mProjectUuid(projUuid),
     mProjectRevision(projRevision),
     mX1Compatibility(x1Compatibility),
@@ -286,8 +288,7 @@ void GerberGenerator::printHeader() noexcept {
   // add some X2 attributes
   printX2Attribute('F', ".GenerationSoftware",
                    {"LibrePCB", "LibrePCB", qApp->applicationVersion()});
-  printX2Attribute('F', ".CreationDate",
-                   {QDateTime::currentDateTime().toString(Qt::ISODate)});
+  printX2Attribute('F', ".CreationDate", {mCreationDate.toString(Qt::ISODate)});
   printX2Attribute('F', ".ProjectId",
                    {mProjectId, mProjectUuid.toStr(), mProjectRevision});
   printX2Attribute('F', ".Part", {"Single"});  // "Single" means "this is a PCB"

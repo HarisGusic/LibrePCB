@@ -167,6 +167,7 @@ void BoardGerberExport::exportDrillsPth() const {
 void BoardGerberExport::exportLayerBoardOutlines() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixOutlines());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -179,6 +180,7 @@ void BoardGerberExport::exportLayerBoardOutlines() const {
 void BoardGerberExport::exportLayerTopCopper() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixCopperTop());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -191,6 +193,7 @@ void BoardGerberExport::exportLayerTopCopper() const {
 void BoardGerberExport::exportLayerBottomCopper() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixCopperBot());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -205,6 +208,7 @@ void BoardGerberExport::exportLayerInnerCopper() const {
     mCurrentInnerCopperLayer = i;  // used for attribute provider
     FilePath fp = getOutputFilePath(mSettings->getSuffixCopperInner());
     GerberGenerator gen(
+        QDateTime::currentDateTime(),
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
         mBoard.getUuid(), mProject.getMetadata().getVersion(),
         mSettings->getGerberX1Compatibility());
@@ -219,6 +223,7 @@ void BoardGerberExport::exportLayerInnerCopper() const {
 void BoardGerberExport::exportLayerTopSolderMask() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderMaskTop());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -231,6 +236,7 @@ void BoardGerberExport::exportLayerTopSolderMask() const {
 void BoardGerberExport::exportLayerBottomSolderMask() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderMaskBot());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -246,6 +252,7 @@ void BoardGerberExport::exportLayerTopSilkscreen() const {
       0) {  // don't create silkscreen file if no layers selected
     FilePath fp = getOutputFilePath(mSettings->getSuffixSilkscreenTop());
     GerberGenerator gen(
+        QDateTime::currentDateTime(),
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
         mBoard.getUuid(), mProject.getMetadata().getVersion(),
         mSettings->getGerberX1Compatibility());
@@ -264,6 +271,7 @@ void BoardGerberExport::exportLayerBottomSilkscreen() const {
       0) {  // don't create silkscreen file if no layers selected
     FilePath fp = getOutputFilePath(mSettings->getSuffixSilkscreenBot());
     GerberGenerator gen(
+        QDateTime::currentDateTime(),
         mProject.getMetadata().getName() % " - " % mBoard.getName(),
         mBoard.getUuid(), mProject.getMetadata().getVersion(),
         mSettings->getGerberX1Compatibility());
@@ -279,6 +287,7 @@ void BoardGerberExport::exportLayerBottomSilkscreen() const {
 void BoardGerberExport::exportLayerTopSolderPaste() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderPasteTop());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
@@ -291,6 +300,7 @@ void BoardGerberExport::exportLayerTopSolderPaste() const {
 void BoardGerberExport::exportLayerBottomSolderPaste() const {
   FilePath fp = getOutputFilePath(mSettings->getSuffixSolderPasteBot());
   GerberGenerator gen(
+      QDateTime::currentDateTime(),
       mProject.getMetadata().getName() % " - " % mBoard.getName(),
       mBoard.getUuid(), mProject.getMetadata().getVersion(),
       mSettings->getGerberX1Compatibility());
