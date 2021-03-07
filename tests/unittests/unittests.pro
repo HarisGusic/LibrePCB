@@ -81,6 +81,7 @@ SOURCES += \
     common/attributes/attributetypetest.cpp \
     common/attributes/attributeunittest.cpp \
     common/boarddesignrulestest.cpp \
+    common/cam/gerbergeneratortest.cpp \
     common/circuitidentifiertest.cpp \
     common/fileio/csvfiletest.cpp \
     common/fileio/directorylocktest.cpp \
